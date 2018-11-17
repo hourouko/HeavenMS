@@ -102,7 +102,7 @@ public class PlayerStorage {
         for(MapleCharacter mc : chrList) {
             MapleClient client = mc.getClient();
             if(client != null) {
-                client.forceDisconnect();
+                client.disconnect(true, false);
             }
         }
         

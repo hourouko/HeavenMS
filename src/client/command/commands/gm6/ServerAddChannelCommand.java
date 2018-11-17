@@ -27,7 +27,6 @@ import client.MapleCharacter;
 import client.command.Command;
 import client.MapleClient;
 import net.server.Server;
-import server.ThreadManager;
 
 public class ServerAddChannelCommand extends Command {
     {
@@ -45,7 +44,7 @@ public class ServerAddChannelCommand extends Command {
 
         final int worldid = Integer.parseInt(params[0]);
 
-        ThreadManager.getInstance().newTask(new Runnable() {
+        new Thread(new Runnable() {
             @Override
             public void run() {
                 int chid = Server.getInstance().addChannel(worldid);
@@ -65,6 +64,6 @@ public class ServerAddChannelCommand extends Command {
                     }
                 }
             }
-        });
+        }).start();
     }
 }

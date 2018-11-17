@@ -35,6 +35,7 @@ import constants.GameConstants;
 /**
  * @author Ronan
  */
+
 public final class UseOwlOfMinervaHandler extends AbstractMaplePacketHandler {
 
     @Override

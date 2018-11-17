@@ -43,7 +43,7 @@ public class GotoCommand extends Command {
 
         MapleCharacter player = c.getPlayer();
         if (params.length < 1){
-            player.yellowMessage("Syntax: @goto <map name>");
+            player.yellowMessage("Syntax: @go <map name>");
             return;
         }
         if (gotomaps.containsKey(params[0])) {

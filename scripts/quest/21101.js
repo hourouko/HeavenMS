@@ -20,7 +20,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 importPackage(Packages.client);
-importPackage(Packages.constants);
 
 status = -1;
 
@@ -48,10 +47,8 @@ function start(mode, type, selection) {
             qm.changeJobById(2100);
             qm.resetStats();
             
-            if (ServerConstants.USE_FULL_ARAN_SKILLSET) {
-                qm.teachSkill(21000000, 0, 10, -1);   //combo ability
-                qm.teachSkill(21001003, 0, 20, -1);   //polearm booster
-            }
+            //qm.teachSkill(21000000, 0, 10, -1);   //learned later...
+            //qm.teachSkill(21001003, 0, 20, -1);   //learned later...
             
             qm.completeQuest();
 

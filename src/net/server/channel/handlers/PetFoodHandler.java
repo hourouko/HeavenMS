@@ -21,7 +21,6 @@
  */
 package net.server.channel.handlers;
 
-import net.AbstractMaplePacketHandler;
 import client.MapleCharacter;
 import client.MapleClient;
 import client.inventory.MapleInventory;
@@ -29,8 +28,8 @@ import client.inventory.MapleInventoryType;
 import client.inventory.MaplePet;
 import client.autoban.AutobanManager;
 import client.inventory.Item;
+import net.AbstractMaplePacketHandler;
 import client.inventory.manipulator.MapleInventoryManipulator;
-import net.server.Server;
 import tools.MaplePacketCreator;
 import tools.data.input.SeekableLittleEndianAccessor;
 
@@ -45,8 +44,7 @@ public final class PetFoodHandler extends AbstractMaplePacketHandler {
             return;
         }
         abm.spam(2);
-        slea.readInt(); // timestamp issue detected thanks to Masterrulax
-        abm.setTimestamp(1, Server.getInstance().getCurrentTimestamp(), 3);
+        abm.setTimestamp(1, slea.readInt(), 3);
         if (chr.getNoPets() == 0) {
             c.announce(MaplePacketCreator.enableActions());
             return;

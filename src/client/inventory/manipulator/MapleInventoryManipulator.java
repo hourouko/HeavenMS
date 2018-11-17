@@ -67,6 +67,44 @@ public class MapleInventoryManipulator {
         return addById(c, itemId, quantity, owner, petid, (byte) 0, expiration);
     }
 
+    public static void editEquipById(MapleCharacter chr, int itemid, byte stat, short value) {
+editEquipById(chr, itemid, stat, value, false);
+}
+
+    public static void editEquipById(MapleCharacter chr, int input, byte stat, short value, boolean superGacha) {
+        Equip equip = null;
+        if (superGacha) {
+            equip = (Equip) chr.getInventory(MapleInventoryType.EQUIP).getItem((byte) input);
+            equip.setStr(value);
+            equip.setDex(value);
+            equip.setInt(value);
+            equip.setLuk(value);
+            equip.setWatk(value);
+            return;
+        }
+        equip = (Equip) chr.getInventory(MapleInventoryType.EQUIP).findById(input);
+        switch (stat) {
+            case 1:
+                equip.setStr(value);
+                break;
+            case 2:
+                equip.setDex(value);
+                break;
+            case 3:
+                equip.setInt(value);
+                break;
+            case 4:
+                equip.setLuk(value);
+                break;
+            case 5:
+                equip.setWatk(value);
+                break;
+        }
+    }
+    
+    
+    
+    
     public static boolean addById(MapleClient c, int itemId, short quantity, String owner, int petid, byte flag, long expiration) {
         MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
         MapleInventoryType type = ItemConstants.getInventoryType(itemId);

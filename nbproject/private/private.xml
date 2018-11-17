@@ -2,6 +2,26 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="2"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/E:/v83/Server/src/net/server/audit/ThreadTracker.java</file>
+            <file>file:/E:/v83/Server/src/client/inventory/Item.java</file>
+            <file>file:/E:/v83/Server/src/server/MapleItemInformationProvider.java</file>
+            <file>file:/E:/v83/Server/src/server/maps/MapleMap.java</file>
+            <file>file:/E:/v83/Server/src/net/server/channel/handlers/UseCashItemHandler.java</file>
+            <file>file:/E:/v83/Server/src/tools/ChairID.java</file>
+            <file>file:/E:/v83/Server/src/constants/GameConstants.java</file>
+            <file>file:/E:/v83/Server/src/constants/ItemConstants.java</file>
+            <file>file:/E:/v83/Server/src/net/server/Server.java</file>
+            <file>file:/E:/v83/Server/src/client/inventory/Equip.java</file>
+            <file>file:/E:/v83/Server/src/net/server/channel/handlers/ChangeChannelHandler.java</file>
+            <file>file:/E:/v83/Server/src/scripting/event/EventInstanceManager.java</file>
+            <file>file:/E:/v83/Server/src/client/inventory/manipulator/MapleInventoryManipulator.java</file>
+            <file>file:/E:/v83/Server/src/server/life/MapleNPC.java</file>
+            <file>file:/E:/v83/Server/src/net/server/world/World.java</file>
+            <file>file:/E:/v83/Server/scripts/npc/allchairgacha.js</file>
+            <file>file:/E:/v83/Server/src/server/ThreadManager.java</file>
+            <file>file:/E:/v83/Server/src/server/life/MapleMonster.java</file>
+            <file>file:/E:/v83/Server/src/server/maps/AbstractAnimatedMapleMapObject.java</file>
+        </group>
     </open-files>
 </project-private>

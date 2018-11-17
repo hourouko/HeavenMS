@@ -61,7 +61,7 @@ public final class MoveLifeHandler extends AbstractMovementPacketHandler {
 		}
                 
 		MapleMonster monster = (MapleMonster) mmo;
-                List<MapleCharacter> banishPlayers = null;
+                List<MapleCharacter> banishPlayers = new LinkedList<>();
                 
 		byte pNibbles = slea.readByte();
 		byte rawActivity = slea.readByte();
@@ -70,7 +70,7 @@ public final class MoveLifeHandler extends AbstractMovementPacketHandler {
 		short pOption = slea.readShort();
                 slea.skip(8);
                 
-                if (rawActivity >= 0) {
+		if (rawActivity >= 0) {
 			rawActivity = (byte) (rawActivity & 0xFF >> 1);
 		}
 
@@ -78,9 +78,7 @@ public final class MoveLifeHandler extends AbstractMovementPacketHandler {
 		boolean isSkill = inRangeInclusive(rawActivity, 21, 25);
 
 		byte attackId = (byte) (isAttack ? rawActivity - 12 : -1);
-                isSkill |= (pNibbles != 0);
-                
-		boolean nextMovementCouldBeSkill = true;
+		boolean nextMovementCouldBeSkill = (pNibbles & 0x0F) != 0;
 		boolean pUnk = (pNibbles & 0xF0) != 0;
                 
                 boolean currentController = (monster.getController() == player);
@@ -88,7 +86,6 @@ public final class MoveLifeHandler extends AbstractMovementPacketHandler {
 		MobSkill toUse = null;
                 int useSkillId = 0, useSkillLevel = 0;
                 
-                int rnd = 0;
                 if (isSkill) {
                         int noSkills = monster.getNoSkills();
                         if (noSkills > 0) {
@@ -98,21 +95,21 @@ public final class MoveLifeHandler extends AbstractMovementPacketHandler {
                                 useSkillId = skillToUse.getLeft();
                                 useSkillLevel = skillToUse.getRight();
                                 toUse = MobSkillFactory.getMobSkill(useSkillId, useSkillLevel);
-                                
-                                rnd = rndSkill;
+                        } else {
                                 nextMovementCouldBeSkill = false;
                         }
+                } else {
+                        nextMovementCouldBeSkill = false;
                 }
                 
                 int mobMp;
                 if (toUse != null && toUse.getHP() >= (int) (((float) monster.getHp() / monster.getMaxHp()) * 100) && monster.canUseSkill(toUse)) {
                         mobMp = monster.getMp();
-                        
+                    
                         int animationTime = MapleMonsterInformationProvider.getInstance().getMobSkillAnimationTime(toUse);
-                        if(animationTime > 0 && toUse.getSkillId() != 129) {
-                                toUse.applyDelayedEffect(player, monster, true, animationTime);
+                        if(animationTime > 0) {
+                                toUse.applyDelayedEffect(player, monster, true, banishPlayers, animationTime);
                         } else {
-                                banishPlayers = new LinkedList<>();
                                 toUse.applyEffect(player, monster, true, banishPlayers);
                         }
                 } else {
@@ -141,33 +138,26 @@ public final class MoveLifeHandler extends AbstractMovementPacketHandler {
 		short start_y = slea.readShort(); // hmm...
 		Point startPos = new Point(start_x, start_y - 2);
 		List<LifeMovementFragment> res = parseMovement(slea);
-		
-                boolean aggro;
-                monster.lockMonster();
-                try {
-                        if (!currentController) {
-                                if (monster.isAttackedBy(player)) {
-                                        monster.switchController(player, true);
-                                } else {
-                                        return;
-                                }
-                        } else if (rawActivity == -1 && monster.isControllerKnowsAboutAggro() && !monster.isMobile() && !monster.isFirstAttack()) {
-                                monster.setControllerHasAggro(false);
-                                monster.setControllerKnowsAboutAggro(false);
-                        }
-
-                        aggro = monster.isControllerHasAggro();
-                        if (aggro) {
-                                monster.setControllerKnowsAboutAggro(true);
-                        }
-                } finally {
-                        monster.unlockMonster();
-                }
+		if (!currentController) {
+			if (monster.isAttackedBy(player)) {
+				monster.switchController(player, true);
+			} else {
+				return;
+			}
+		} else if (rawActivity == -1 && monster.isControllerKnowsAboutAggro() && !monster.isMobile() && !monster.isFirstAttack()) {
+                        monster.setControllerHasAggro(false);
+                        monster.setControllerKnowsAboutAggro(false);
+		}
                 
+		boolean aggro = monster.isControllerHasAggro();
                 if (toUse != null) {
                         c.announce(MaplePacketCreator.moveMonsterResponse(objectid, moveid, mobMp, aggro, toUse.getSkillId(), toUse.getSkillLevel()));
 		} else {
 			c.announce(MaplePacketCreator.moveMonsterResponse(objectid, moveid, mobMp, aggro));
+		}
+                
+		if (aggro) {
+			monster.setControllerKnowsAboutAggro(true);
 		}
                 
 		if (res != null) {
@@ -176,10 +166,8 @@ public final class MoveLifeHandler extends AbstractMovementPacketHandler {
 			map.moveMonster(monster, monster.getPosition());
 		}
                 
-                if (banishPlayers != null) {
-                        for (MapleCharacter chr : banishPlayers) {
-                               chr.changeMapBanish(monster.getBanish().getMap(), monster.getBanish().getPortal(), monster.getBanish().getMsg());
-                        }
+                for (MapleCharacter chr : banishPlayers) {
+                       chr.changeMapBanish(monster.getBanish().getMap(), monster.getBanish().getPortal(), monster.getBanish().getMsg());
                 }
 	}
 

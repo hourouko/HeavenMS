@@ -573,7 +573,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         }
     }
 
-    private void removeController() {
+      private void removeController() {
         this.lockMonster();
         try {
             MapleCharacter chrController = getController();
@@ -581,7 +581,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
                 chrController.announce(MaplePacketCreator.stopControllingMonster(this.getObjectId()));
                 chrController.stopControllingMonster(this);
             }
-            
+
             setController(null);
             setControllerHasAggro(false);
             setControllerKnowsAboutAggro(false);
@@ -589,10 +589,11 @@ public class MapleMonster extends AbstractLoadedMapleLife {
             this.unlockMonster();
         }
     }
+
     
     public MapleCharacter killBy(final MapleCharacter killer) {
         distributeExperience(killer != null ? killer.getId() : 0);
-        
+
         removeController();
         
         final List<Integer> toSpawn = this.getRevives(); // this doesn't work (?)
@@ -801,15 +802,15 @@ public class MapleMonster extends AbstractLoadedMapleLife {
     }
 
     public void switchController(MapleCharacter newController, boolean immediateAggro) {
-        this.lockMonster();
+             this.lockMonster();
         try {
             MapleCharacter controllers = getController();
             if (controllers == newController) {
                 return;
             }
-            
+
             removeController();
-            
+
             newController.controlMonster(this, immediateAggro);
             setController(newController);
             if (immediateAggro) {
@@ -820,7 +821,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
             this.unlockMonster();
         }
     }
-
+    
     public void addListener(MonsterListener listener) {
         statiLock.lock();
         try {
@@ -881,7 +882,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
     }
     
     @Override
-    public void sendSpawnData(MapleClient client) {
+        public void sendSpawnData(MapleClient client) {
         if (hp.get() <= 0) { // mustn't monsterLock this function
             return;
         }
@@ -890,7 +891,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         } else {
             client.announce(MaplePacketCreator.spawnMonster(this, false));
         }
-        
+
         statiLock.lock();
         try {
             if (stati.size() > 0) {
@@ -901,7 +902,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         } finally {
             statiLock.unlock();
         }
-        
+
         if (hasBossHPBar()) {
             client.announceBossHpBar(this, this.hashCode(), makeBossHPBarPacket());
         }
@@ -920,6 +921,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
     public boolean isMobile() {
         return stats.isMobile();
     }
+
 
     public ElementalEffectiveness getElementalEffectiveness(Element e) {
         statiLock.lock();
@@ -1174,11 +1176,13 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         
         map.getChannelServer().registerMobStatus(map.getId(), effect, cancelTask, duration);
     }
+
+    
     
     public void refreshMobPosition() {
         updateMobPosition(getPosition());
     }
-    
+
     public void updateMobPosition(Point newPoint) {
         removeController();
         setPosition(newPoint);
@@ -1186,7 +1190,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         map.moveMonster(this, this.getPosition());
         map.updateMonsterController(this);
     }
-
+    
     private void debuffMobStat(MonsterStatus stat) {
         statiLock.lock();
         try {

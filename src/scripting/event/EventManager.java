@@ -60,8 +60,6 @@ import net.server.audit.LockCollector;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.MonitoredReentrantLock;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
-import server.ThreadManager;
-//import jdk.nashorn.api.scripting.ScriptUtils;
 
 /**
  *
@@ -649,11 +647,12 @@ public class EventManager {
             if(p != null) {
                 List<MaplePartyCharacter> lmpc;
                 
-                /*if(ServerConstants.JAVA_8) {
+                /*
+                if(ServerConstants.JAVA_8)
                     lmpc = new ArrayList<>(((Map<String, MaplePartyCharacter>)(ScriptUtils.convert(p, Map.class))).values());
-                } else {
+                else
                     lmpc = new ArrayList<>((List<MaplePartyCharacter>) p);
-                }*/
+                */
                 
                 lmpc = new ArrayList<>((List<MaplePartyCharacter>) p);
                 party.setEligibleMembers(lmpc);
@@ -810,7 +809,8 @@ public class EventManager {
     }
     
     private void fillEimQueue() {
-        ThreadManager.getInstance().newTask(new EventManagerWorker());  //call new thread to fill up readied instances queue
+        Thread t = new Thread(new EventManagerWorker());  //call new thread to fill up readied instances queue
+        t.start();
     }
     
     private EventInstanceManager getReadyInstance() {

@@ -336,7 +336,7 @@ public class Equip extends Item {
     
     public Map<StatUpgrade, Short> getStats() {
         Map<StatUpgrade, Short> stats = new HashMap<>(5);
-        
+
         if(dex > 0) stats.put(StatUpgrade.incDEX, dex);
         if(str > 0) stats.put(StatUpgrade.incSTR, str);
         if(_int > 0) stats.put(StatUpgrade.incINT,_int);
@@ -351,10 +351,10 @@ public class Equip extends Item {
         if(acc > 0) stats.put(StatUpgrade.incACC, acc);
         if(speed > 0) stats.put(StatUpgrade.incSpeed, speed);
         if(jump > 0) stats.put(StatUpgrade.incJump, jump);
-        
+
         return stats;
     }
-    
+
     public Pair<String, Pair<Boolean, Boolean>> gainStats(List<Pair<StatUpgrade, Integer>> stats) {
         boolean gotSlot = false, gotVicious = false;
         String lvupStr = "";
@@ -431,7 +431,7 @@ public class Equip extends Item {
                     jump += statUp;
                     lvupStr += "+" + statUp + "JUMP ";
                     break;
-                    
+
                 case incVicious:
                     vicious -= stat.getRight();
                     gotVicious = true;
@@ -442,21 +442,21 @@ public class Equip extends Item {
                     break;
             }
         }
-        
+
         return new Pair<>(lvupStr, new Pair<>(gotSlot, gotVicious));
     }
-    
+
     private void gainLevel(MapleClient c) {
         List<Pair<StatUpgrade, Integer>> stats = new LinkedList<>();
-        
+
         if(isElemental) {
             List<Pair<String, Integer>> elementalStats = MapleItemInformationProvider.getInstance().getItemLevelupStats(getItemId(), itemLevel);
-            
+
             for(Pair<String, Integer> p: elementalStats) {
                 if(p.getRight() > 0) stats.add(new Pair<>(StatUpgrade.valueOf(p.getLeft()), p.getRight()));
             }
         }
-        
+
         if(!stats.isEmpty()) {
             if(ServerConstants.USE_EQUIPMNT_LVLUP_SLOTS) {
                 if(vicious > 0) getUnitSlotUpgrade(stats, StatUpgrade.incVicious);
@@ -464,13 +464,13 @@ public class Equip extends Item {
             }
         } else {
             isUpgradeable = false;
-            
+
             improveDefaultStats(stats);
             if(ServerConstants.USE_EQUIPMNT_LVLUP_SLOTS) {
                 if(vicious > 0) getUnitSlotUpgrade(stats, StatUpgrade.incVicious);
                 getUnitSlotUpgrade(stats, StatUpgrade.incSlot);
             }
-            
+
             if(isUpgradeable) {
                 while(stats.isEmpty()) {
                     improveDefaultStats(stats);
@@ -481,12 +481,12 @@ public class Equip extends Item {
                 }
             }
         }
-        
+
         itemLevel++;
-        
+
         String lvupStr = "'" + MapleItemInformationProvider.getInstance().getName(this.getItemId()) + "' is now level " + itemLevel + "! ";
         String showStr = "#e'" + MapleItemInformationProvider.getInstance().getName(this.getItemId()) + "'#b is now #elevel #r" + itemLevel + "#k#b!";
-        
+
         Pair<String, Pair<Boolean, Boolean>> res = gainStats(stats);
         lvupStr += res.getLeft();
         boolean gotSlot = res.getRight().getLeft();
@@ -518,15 +518,17 @@ public class Equip extends Item {
         // from level 1 to 2 is killing about 100~200 mobs of the same level range, on a 1x EXP rate scenario.
         
         if(reqLevel < 5) {
-            return 42;
+            return Math.max((1906073.648 * Math.exp(reqLevel * 0.03275)), 15);
+        } else if(reqLevel >= 137) {
+            return Math.max(( 10985.818 * Math.exp(reqLevel * 0.03275)), 15);
         } else if(reqLevel >= 78) {
-            return Math.max((10413.648 * Math.exp(reqLevel * 0.03275)), 15);
+            return Math.max((1041093.648 * Math.exp(reqLevel * 0.03275)), 15);
         } else if(reqLevel >= 38) {
-            return Math.max(( 4985.818 * Math.exp(reqLevel * 0.02007)), 15);
+            return Math.max(( 4980005.818 * Math.exp(reqLevel * 0.02007)), 15);
         } else if(reqLevel >= 18) {
-            return Math.max((  248.219 * Math.exp(reqLevel * 0.11093)), 15);
+            return Math.max((  2000048.219 * Math.exp(reqLevel * 0.11093)), 15);
         } else {
-            return Math.max(((1334.564 * Math.log(reqLevel)) - 1731.976), 15);
+            return Math.max(((133000004.564 * Math.log(reqLevel)) - 1731.976), 15);
         }
     }
     

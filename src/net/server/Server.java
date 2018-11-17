@@ -36,6 +36,8 @@ import java.util.HashSet;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.TimeZone;
+import server.ThreadManager;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
@@ -85,10 +87,8 @@ import client.newyear.NewYearCardRecord;
 import constants.ItemConstants;
 import constants.GameConstants;
 import constants.ServerConstants;
-import java.util.TimeZone;
 import server.CashShop.CashItemFactory;
 import server.MapleSkillbookInformationProvider;
-import server.ThreadManager;
 import server.TimerManager;
 import server.life.MaplePlayerNPCFactory;
 import server.quest.MapleQuest;
@@ -152,6 +152,7 @@ public class Server {
     public int getCurrentTimestamp() {
         return (int) (Server.getInstance().getCurrentTime() - Server.uptime);
     }
+
     
     public long getCurrentTime() {  // returns a slightly delayed time value, under frequency of UPDATE_INTERVAL
         return serverCurrentTime;
@@ -836,10 +837,10 @@ public class Server {
         Connection con = null;
         try {
             con = DatabaseConnection.getConnection();
-            
+
             ps = con.prepareStatement("UPDATE inventoryitems SET petid = -1, expiration = 0 WHERE petid != -1 AND petid NOT IN (SELECT petid FROM pets)");
             ps.executeUpdate();
-            
+
             ps.close();
             con.close();
         } catch(SQLException ex) {
@@ -857,6 +858,8 @@ public class Server {
             }
         }
     }
+
+    
     
     public void init() {
         Properties p = loadWorldINI();
@@ -864,7 +867,8 @@ public class Server {
             System.exit(0);
         }
 
-        System.out.println("HeavenMS v" + ServerConstants.VERSION + " starting up.\r\n");
+        System.out.println("HiddenMS v" + ServerConstants.VERSION + " starting up.\r\n");
+
         
         if(ServerConstants.SHUTDOWNHOOK)
             Runtime.getRuntime().addShutdownHook(new Thread(shutdown(false)));
@@ -889,7 +893,6 @@ public class Server {
         } catch (SQLException sqle) {
             sqle.printStackTrace();
         }
-        
         clearUnreferencedPetIds();
         MapleCashidGenerator.loadExistentCashIdsFromDb();
         
@@ -1751,7 +1754,6 @@ public class Server {
                     }
                     
                     resetServerWorlds();
-                    
                     ThreadManager.getInstance().stop();
                     TimerManager.getInstance().purge();
                     TimerManager.getInstance().stop();

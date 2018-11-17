@@ -40,7 +40,7 @@ public class TimeCommand extends Command {
     @Override
     public void execute(MapleClient client, String[] params) {
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-        dateFormat.setTimeZone(TimeZone.getDefault());
+        dateFormat.setTimeZone(TimeZone.getTimeZone(ServerConstants.TIMEZONE));
         client.getPlayer().yellowMessage("HeavenMS Server Time: " + dateFormat.format(new Date()));
     }
 }

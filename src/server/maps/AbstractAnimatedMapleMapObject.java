@@ -19,6 +19,7 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 package server.maps;
 
 import java.awt.Point;
@@ -44,11 +45,11 @@ public abstract class AbstractAnimatedMapleMapObject extends AbstractMapleMapObj
     public boolean isFacingLeft() {
         return Math.abs(stance) % 2 == 1;
     }
-    
+
     public List<LifeMovementFragment> getIdleMovement() {
         AbsoluteLifeMovement alm = new AbsoluteLifeMovement(0, getPosition(), 0, getStance());
         alm.setPixelsPerSecond(new Point(0, 0));
-        
+
         List<LifeMovementFragment> moveUpdate = Collections.singletonList((LifeMovementFragment) alm);
         return moveUpdate;
     }

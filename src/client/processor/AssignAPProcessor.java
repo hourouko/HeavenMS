@@ -43,7 +43,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import server.ThreadManager;
 import tools.MaplePacketCreator;
 import tools.Randomizer;
 import tools.data.input.SeekableLittleEndianAccessor;
@@ -334,12 +333,13 @@ public class AssignAPProcessor {
                     AutobanFactory.PACKET_EDIT.alert(chr, "Didn't send full packet for Auto Assign.");
                     
                     final MapleClient client = c;
-                    ThreadManager.getInstance().newTask(new Runnable() {
+                    Thread t = new Thread(new Runnable() {
                         @Override
                         public void run() {
                             client.disconnect(false, false);
                         }
                     });
+                    t.start();
                     
                     return;
                 }

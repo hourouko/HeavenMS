@@ -194,7 +194,7 @@ public class CommandsExecutor {
         addCommand("whatdropsfrom", 1, WhatDropsFromCommand.class);
         addCommand("whodrops", 1, WhoDropsCommand.class);
         addCommand("buffme", 1, BuffMeCommand.class);
-        addCommand("goto", 1, GotoCommand.class);
+        addCommand("go", 1, GotoCommand.class);
         
         commandsNameDesc.add(levelCommandsCursor);
     }
@@ -319,8 +319,7 @@ public class CommandsExecutor {
         addCommand("pap", 4, PapCommand.class);
         addCommand("pianus", 4, PianusCommand.class);
         addCommand("cake", 4, CakeCommand.class);
-        addCommand("playernpcremove", 4, PlayerNpcRemoveCommand.class);
-        addCommand("playernpc", 4, PlayerNpcCommand.class);
+
         
         commandsNameDesc.add(levelCommandsCursor);
     }
@@ -331,7 +330,10 @@ public class CommandsExecutor {
         addCommand("debug", 5, DebugCommand.class);
         addCommand("set", 5, SetCommand.class);
         addCommand("showpackets", 5, ShowPacketsCommand.class);
-        
+        addCommand(new String[]{"permob", "pmob"}, 5, PmobCommand.class);
+        addCommand(new String[]{"permnpc", "pnpc"}, 5, PnpcCommand.class);
+
+        addCommand("rpnpc", 5, RPNpcCommand.class);
         commandsNameDesc.add(levelCommandsCursor);
     }
 

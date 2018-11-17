@@ -61,6 +61,7 @@ import client.inventory.MapleInventoryType;
 import client.inventory.MapleWeaponType;
 import constants.ServerConstants;
 import constants.EquipSlot;
+import constants.GameConstants;
 import constants.ItemConstants;
 import constants.skills.Assassin;
 import constants.skills.Gunslinger;
@@ -646,7 +647,7 @@ public class MapleItemInformationProvider {
     }
     
     public static boolean rollSuccessChance(double prop) {
-        return Math.random() >= testYourLuck(prop / 100.0, ServerConstants.SCROLL_CHANCE_RATE);
+        return Math.random() > testYourLuck(prop / 100.0, ServerConstants.SCROLL_CHANCE_RATE);
     }
     
     private static short getMaximumShortMaxIfOverflow(int value1, int value2) {
@@ -1238,11 +1239,9 @@ public class MapleItemInformationProvider {
         boolean bRestricted = false;
         if(itemId != 0) {
             MapleData data = getItemData(itemId);
-            if (data != null) {
-                bRestricted = MapleDataTool.getIntConvert("info/tradeBlock", data, 0) == 1;
-                if (!bRestricted) {
-                    bRestricted = MapleDataTool.getIntConvert("info/accountSharable", data, 0) == 1;
-                }
+            bRestricted = MapleDataTool.getIntConvert("info/tradeBlock", data, 0) == 1;
+            if (!bRestricted) {
+                bRestricted = MapleDataTool.getIntConvert("info/accountSharable", data, 0) == 1;
             }
         }
         
@@ -1526,6 +1525,41 @@ public class MapleItemInformationProvider {
         }
     }
 
+       public List<Pair<Integer, String>> getAllItems2() { 
+        //if (!itemNameCache.isEmpty()) { 
+        //  return itemNameCache; 
+        //} 
+        List<Pair<Integer, String>> itemPairs = new ArrayList<>(); 
+        MapleData itemsData; 
+        itemsData = stringData.getData("Cash.img"); 
+        for (MapleData itemFolder : itemsData.getChildren()) { 
+            itemPairs.add(new Pair<>(Integer.parseInt(itemFolder.getName()), MapleDataTool.getString("name", itemFolder, "NO-NAME"))); 
+        } 
+        itemsData = stringData.getData("Consume.img"); 
+        for (MapleData itemFolder : itemsData.getChildren()) { 
+            itemPairs.add(new Pair<>(Integer.parseInt(itemFolder.getName()), MapleDataTool.getString("name", itemFolder, "NO-NAME"))); 
+        } 
+        itemsData = stringData.getData("Eqp.img").getChildByPath("Eqp"); 
+        for (MapleData eqpType : itemsData.getChildren()) { 
+            for (MapleData itemFolder : eqpType.getChildren()) { 
+                itemPairs.add(new Pair<>(Integer.parseInt(itemFolder.getName()), MapleDataTool.getString("name", itemFolder, "NO-NAME"))); 
+            } 
+        } 
+        itemsData = stringData.getData("Etc.img").getChildByPath("Etc"); 
+        for (MapleData itemFolder : itemsData.getChildren()) { 
+            itemPairs.add(new Pair<>(Integer.parseInt(itemFolder.getName()), MapleDataTool.getString("name", itemFolder, "NO-NAME"))); 
+        } 
+        itemsData = stringData.getData("Ins.img"); 
+        for (MapleData itemFolder : itemsData.getChildren()) { 
+            itemPairs.add(new Pair<>(Integer.parseInt(itemFolder.getName()), MapleDataTool.getString("name", itemFolder, "NO-NAME"))); 
+        } 
+        itemsData = stringData.getData("Pet.img"); 
+        for (MapleData itemFolder : itemsData.getChildren()) { 
+            itemPairs.add(new Pair<>(Integer.parseInt(itemFolder.getName()), MapleDataTool.getString("name", itemFolder, "NO-NAME"))); 
+        } 
+        return itemPairs; 
+    } 
+    
     public boolean isCash(int itemId) {
         int itemType = itemId / 1000000;
         if (itemType == 5) return true;
@@ -2073,6 +2107,10 @@ public class MapleItemInformationProvider {
         }
         
         return skillbook;
+    }
+
+    int[] getAllItemIds() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     public class scriptedItem {

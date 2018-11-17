@@ -26,7 +26,6 @@ import net.AbstractMaplePacketHandler;
 import server.life.MapleMonster;
 import server.maps.MapleMap;
 import tools.data.input.SeekableLittleEndianAccessor;
-import client.MapleCharacter;
 
 public final class AutoAggroHandler extends AbstractMaplePacketHandler {
 
@@ -39,26 +38,18 @@ public final class AutoAggroHandler extends AbstractMaplePacketHandler {
         int oid = slea.readInt();
         
         MapleMonster monster = map.getMonsterByOid(oid);
-        if (monster != null) {
-            MapleCharacter currentController = monster.getController();
-            monster.lockMonster();
-            try {
-                if (currentController != null) {
-                    if (!monster.isControllerHasAggro()) {
-                        if (map.getCharacterById(currentController.getId()) == null) {
-                            monster.switchController(c.getPlayer(), true);
-                        } else {
-                            monster.switchController(currentController, true);
-                        }
-                    } else if (map.getCharacterById(currentController.getId()) == null) {
-                        monster.switchController(c.getPlayer(), true);
-                    }
-                } else {
+        if (monster != null && monster.getController() != null) {
+            if (!monster.isControllerHasAggro()) {
+                if (map.getCharacterById(monster.getController().getId()) == null) {
                     monster.switchController(c.getPlayer(), true);
+                } else {
+                    monster.switchController(monster.getController(), true);
                 }
-            } finally {
-                monster.unlockMonster();
+            } else if (map.getCharacterById(monster.getController().getId()) == null) {
+                monster.switchController(c.getPlayer(), true);
             }
+        } else if (monster != null && monster.getController() == null) {
+            monster.switchController(c.getPlayer(), true);
         }
     }
 }

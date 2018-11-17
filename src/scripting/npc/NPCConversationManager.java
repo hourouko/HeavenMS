@@ -59,11 +59,14 @@ import client.inventory.ItemFactory;
 import client.inventory.MaplePet;
 import constants.ItemConstants;
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import server.MapleSkillbookInformationProvider;
 import server.MapleSkillbookInformationProvider.SkillBookEntry;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
+import tools.Pair;
 
 /**
  *
@@ -385,6 +388,19 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
             MapleShopFactory.getInstance().getShop(id).sendShop(c);
         }
 
+        public void openShopById(int id){
+        MapleShopFactory.getInstance().getShopById(id).sendShop(getClient());
+        }
+        public void openShopBySearch(String query){
+        List<Integer> itemIds = new ArrayList<Integer>();
+        for (Pair<Integer,String> itemPair: MapleItemInformationProvider.getInstance().getAllItems()){
+            if (itemPair.getRight().toLowerCase().contains(query.toLowerCase()))
+                itemIds.add(itemPair.getLeft());
+        }
+        MapleShopFactory.getInstance().loadShopByArray(getPlayer(),itemIds).sendShop(getClient());
+    }
+        
+        
 	public void maxMastery() {
 		for (MapleData skill_ : MapleDataProviderFactory.getDataProvider(new File(System.getProperty("wzpath") + "/" + "String.wz")).getData("Skill.img").getChildren()) {
 			try {
@@ -400,6 +416,9 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
 		}
 	}
 
+         
+    
+        
 	public void doGachapon() {
 		int[] maps = {100000000, 101000000, 102000000, 103000000, 105040300, 800000000, 809000101, 809000201, 600000000, 120000000};
 

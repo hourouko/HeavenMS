@@ -21,7 +21,9 @@
 */
 package server;
 
+import client.MapleCharacter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -58,7 +60,27 @@ public class MapleShopFactory {
         }
         return loadShop(shopId, true);
     }
-
+    public MapleShop loadShopByArray(MapleCharacter chr, List<Integer> items){
+        return MapleShop.createByArray(chr, items);
+    }
+    public MapleShop getShopById(int id){
+        if (shops.containsKey(id)){
+            return shops.get(id);
+        }
+        return loadShopById(id, true);
+    }
+    private MapleShop loadShopById(int id, boolean isShopId) {
+        MapleShop ret = MapleShop.createById(id);
+        if (ret != null) {
+            shops.put(ret.getId(), ret);
+            npcShops.put(ret.getNpcId(), ret);
+        } else if (isShopId) {
+            shops.put(id, null);
+        } else {
+            npcShops.put(id, null);
+        }
+        return ret;
+    }
     public MapleShop getShopForNPC(int npcId) {
         if (npcShops.containsKey(npcId)) {
             return npcShops.get(npcId);
@@ -69,5 +91,7 @@ public class MapleShopFactory {
     public void reloadShops() {
         shops.clear();
         npcShops.clear();
-    }
 }
+}
+
+ 

@@ -46,7 +46,7 @@ public final class ItemConstants {
     public final static int PET_COME = 0x80;
     public final static int ACCOUNT_SHARING = 0x100;
     public final static int MERGE_UNTRADEABLE = 0x200;
-
+    
     public final static boolean EXPIRING_ITEMS = true;
     public final static Set<Integer> permanentItemids = new HashSet<>();
 

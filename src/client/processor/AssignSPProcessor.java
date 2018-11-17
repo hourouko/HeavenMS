@@ -30,7 +30,6 @@ import client.SkillFactory;
 import client.autoban.AutobanFactory;
 import constants.GameConstants;
 import constants.skills.Aran;
-import server.ThreadManager;
 import tools.FilePrinter;
 import tools.MaplePacketCreator;
 
@@ -56,12 +55,13 @@ public class AssignSPProcessor {
                 FilePrinter.printError(FilePrinter.EXPLOITS + c.getPlayer().getName() + ".txt", c.getPlayer().getName() + " tried to use skill " + skillid + " without it being in their job.\r\n");
                 
                 final MapleClient client = c;
-                ThreadManager.getInstance().newTask(new Runnable() {
+                Thread t = new Thread(new Runnable() {
                     @Override
                     public void run() {
                         client.disconnect(true, false);
                     }
                 });
+                t.start();
                 
                 return;
             }

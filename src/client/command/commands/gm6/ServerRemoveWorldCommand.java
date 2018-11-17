@@ -27,7 +27,6 @@ import client.MapleCharacter;
 import client.command.Command;
 import client.MapleClient;
 import net.server.Server;
-import server.ThreadManager;
 
 public class ServerRemoveWorldCommand extends Command {
     {
@@ -44,7 +43,7 @@ public class ServerRemoveWorldCommand extends Command {
             return;
         }
 
-        ThreadManager.getInstance().newTask(new Runnable() {
+        new Thread(new Runnable() {
             @Override
             public void run() {
                 if(Server.getInstance().removeWorld()) {
@@ -61,6 +60,6 @@ public class ServerRemoveWorldCommand extends Command {
                     }
                 }
             }
-        });
+        }).start();
     }
 }

@@ -20,7 +20,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 importPackage(Packages.client);
-importPackage(Packages.constants);
 
 var status = -1;
 
@@ -50,10 +49,6 @@ function end(mode, type, selection) {
             
             qm.gainItem(1142131, true);
             qm.changeJobById(2111);
-            
-            if (ServerConstants.USE_FULL_ARAN_SKILLSET) {
-                qm.teachSkill(21110002, 0, 20, -1);   //full swing
-            }
 
             qm.completeQuest();
         }

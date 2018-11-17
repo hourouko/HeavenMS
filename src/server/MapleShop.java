@@ -21,12 +21,14 @@
 */
 package server;
 
+import client.MapleCharacter;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import client.MapleClient;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import client.inventory.MaplePet;
 import constants.ItemConstants;
+import constants.ServerConstants;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -290,6 +292,47 @@ public class MapleShop {
         return npcId;
     }
 
+    public static MapleShop createById(int id){
+        MapleShop ret = new MapleShop(id, 9030000);
+        try{
+            for (int itemId: MapleItemInformationProvider.getInstance().getAllItemIds()){
+                if (itemId / 1000 == id){
+                    if (!MapleItemInformationProvider.getInstance().isCash(itemId)){
+                        //try{
+                            ret.addItem(new MapleShopItem((short) 10000, itemId, 1, 0));
+                        //}catch (Exception e){
+                            //System.out.print("Error Loading Shop item : " + itemId + "\r\n");
+                        //}
+                    }
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return ret;
+    }
+
+    public static MapleShop createByArray(MapleCharacter chr, List<Integer> items){
+        MapleShop ret = new MapleShop(10000 + chr.getAccountID(), 9030000);
+
+        List<Integer> exceptions = new ArrayList<Integer>();
+        for (int i : ServerConstants.AIO_EXCEPTIONS){
+            exceptions.add(i);
+        }
+
+        items.removeAll(exceptions);
+        
+        for (int i : items){
+            if (!MapleItemInformationProvider.getInstance().isCash(i)){
+                //try{
+                    ret.addItem(new MapleShopItem((short) 10000, i, 1, 0));
+                //}catch (Exception e){
+                    //System.out.print("Error Loading Shop item : " + itemPair.getLeft() + "\r\n");
+                //}
+            }
+        }
+        return ret;
+    }
     public int getId() {
         return id;
     }

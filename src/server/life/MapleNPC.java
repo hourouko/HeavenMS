@@ -44,8 +44,9 @@ public class MapleNPC extends AbstractLoadedMapleLife {
 
     @Override
     public void sendSpawnData(MapleClient client) {
-        client.announce(MaplePacketCreator.spawnNPC(this));
-        client.announce(MaplePacketCreator.spawnNPCRequestController(this, true));
+            client.announce(MaplePacketCreator.spawnNPC(this));
+            client.announce(MaplePacketCreator.spawnNPCRequestController(this, true));
+        
     }
 
     @Override

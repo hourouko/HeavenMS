@@ -41,7 +41,7 @@ public class EmptyWriteLock implements MonitoredWriteLock {
     
     private static String printThreadStack(StackTraceElement[] list) {
         DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-        dateFormat.setTimeZone(TimeZone.getDefault());
+        dateFormat.setTimeZone(TimeZone.getTimeZone(ServerConstants.TIMEZONE));
         String df = dateFormat.format(new Date());
         
         String s = "\r\n" + df + "\r\n";
